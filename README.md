@@ -15,76 +15,23 @@ While typical LLMs struggle with processing extensive contexts, the human brain 
 ### Architecture
 <div align="center">
 
-  <img src="./images/architecture.png" alt="architecture" width="70%"/>
-
-  **Figure 1:**  Architecture of memory formation and retrieval in each LLM layer. *Formation:* Input sequence is initially segmented via surprise (purple dashed lines in ①), then segmentation is refined based on group theoretic metrics (green dashed lines in ②). Initial tokens and local context are preserved. *Retrieval:* via both k-NN search ③ and selecting contiguous events from episodic memory ④.
+  <img src="./images/architecture.png" alt="architecture" width="80%"/>
 
 </div>
+
+**Figure 1:**  Architecture of memory formation and retrieval in each LLM layer. *Formation:* Input sequence is initially segmented via surprise (purple dashed lines in ①), then segmentation is refined based on group theoretic metrics (green dashed lines in ②). Initial tokens and local context are preserved. *Retrieval:* via both k-NN search ③ and selecting contiguous events from episodic memory ④.
 
 ### Results
 
+Click [here](/benchmark/further_results.md) more complete result tables.
 
 <div align="center">
 
-
-  <img src="./images/emllm_rag_fc.png" alt="emllm_rag_fc" width="40%"/>
-
-  **Figure 2:** **(Top)** EM-LLM$_S$ vs. RAG (NV-Embed-v2 retriever) vs. full-context, with LLaMA-3.1-8B as the base LLM, evaluated on LongBench. **(Bottom)** Comparison of various long-sequence methods (sorted based on their context window length) on an extended version of $\infty$-Bench's _Retrieve.PassKey_.
-
-
-  <center>
-
-  | **Task**              | **RAG** | **FC** | **EM-LLM** |
-  |:---------------------:|:-------:|:------:|:----------:|
-  | NarrativeQA           | 22.54   | **29.14** | 26.05   |
-  | Qasper                | **45.45** | 45.34   | 44.41   |
-  | MultiFieldQA          | 51.67   | **54.98** | 52.52   |
-  | HotpotQA              | **55.93** | 54.01   | 54.02   |
-  | 2WikiMQA              | 42.93   | **45.95** | 45.72   |
-  | Musique               | 30.90   | **33.52** | 25.37   |
-  | GovReport             | 29.91   | 34.49   | **35.04** |
-  | QMSum                 | **24.97** | 25.14   | 24.31   |
-  | MultiNews             | 26.77   | 27.00   | **27.76** |
-  | TREC                  | 22.50   | 4.50    | **71.50** |
-  | TriviaQA              | 88.11   | 89.07   | **92.34** |
-  | SAMSum                | 7.56    | 8.68    | **43.31** |
-  | PassageRetrieval       | 65.50   | **100.00** | 99.50   |
-  | LCC                   | 13.16   | 19.30   | **67.45** |
-  | RepoBench-P           | 18.66   | 18.33   | **64.33** |
-  | **Avg. score:**       | 36.44   | 39.30   | **51.58** |
-  | Code.Debug            | **22.59** | 21.70   | 22.59   |
-  | Math.Find             | 35.43   | 26.29   | **36.00** |
-  | Retrieve.KV           | 31.80   | 92.60   | **96.80** |
-  | En.MC                 | **64.19** | 58.07   | 44.54   |
-  | Retrieve.PassKey      | 100.00  | 100.00  | 100.00  |
-  | Retrieve.Number       | 99.83   | 99.32   | **100.00** |
-  | **Avg. score:**       | 58.97   | 66.33   | **66.66** |
-
-  </center>
-
-  **Table 1:** EM-LLM<sub>S</sub> (4K+4K) vs. RAG (NV-Embed-v2 retriever) vs. full-context, with LLaMa-3.1-8B as the base LLM, evaluated on LongBench and $\infty$-Bench.
-
-
-  <center>
-
-  | **Base LLM**  | **Method** | **SQA** | **MQA** | **Sum** | **FSL** | **Ret** | **Cod** | **Avg.** | **C.D** | **M.F** | **MC** | **R.KV** | **R.P** | **R.N** |
-  |:-------------:|:----------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:--------:|:-------:|:-------:|:-------:|:--------:|:-------:|:-------:|
-  | **Mistral v2** | InfLLM (4k+2k) | **33** | 25.5 | 27.1 | 66.1 | 64 | 54.8 | 41.9 | **29.4** | 26.6 | **43.2** | 95.6 | 100 | 99.8 |
-  |               | EM-LLM<sub>SM+C</sub> | 32.9 | **27** | **27.2** | **66.8** | **84.1** | **54.8** | **43.7** | 28.2 | **27.1** | 42.8 | **99** | 100 | 99.8 |
-  | **LLaMA 3**   | InfLLM (4k+4k) | 38.5 | 36.9 | 27 | 69 | 84 | **53.2**  | 47 | 30.5 | **23.7** | **43.7** | **5**  | 100 | 99 |
-  |               | EM-LLM<sub>S</sub> | **39.3** | **37.7** | **27.0** | **69.2** | **87.5** | 50.3 | **47.2** | **31.7** | 16.9 | 40.6 | 4.2 | 100 | **99.6** |
-  | **LLaMA 3.1** | InfLLM (4k+4k) | **41.4** | 40.7 | 29 | 69 | 97 | **64.2** | 51.1 | 22.6 | 33.7 | 46.7 | 81 | 100 | 100 |
-  |               | EM-LLM<sub>SM</sub> | 41.2 | **41.3** | **29.2** | **69.1** | **98.5** | 64.1 | **51.3** | 22.6 | **34** | **47.6** | **90.2** | 100 | 100 |
-  | **Phi 3**     | InfLLM (1k+3k) | 28.4 | 24.9 | 25.6 | 52.9 | 7.5 | 57 | 34.5 | |
-  |               | EM-LLM<sub>S</sub> | **29.2** | **27.1** | **25.9** | **53.5** | **10** | 57 | **35.4** | |
-  | **Phi 3.5**   | InfLLM (1k+3k) | 31.7 | 28.5 | 23.9 | **56.3** | 11.5 | **40.3** | 34.2 | |
-  |               | EM-LLM<sub>S</sub> | **31.8** | **31.9** | **24.5** | 55.5 | **13** | 39.5 | **34.9** | |
-
-  </center>
-
-  **Table 2:** EM-LLM performance on LongBench (grouped tasks) and $\infty$-Bench compared to our baseline InfLLM. **S**: surprise threshold, **SM**: surprise threshold and refinement with modularity, **S+C**: surprise threshold and contiguity buffer, **SM+C**: surprise, refinement and contiguity buffer. Each row indicates the number of local + retrieved tokens (e.g., 4k+2k) used for both InfLLM and EM-LLM.
+  <img src="./images/emllm_rag_fc.png" alt="emllm_rag_fc" width="70%"/>
 
 </div>
+
+**Figure 2:** **(Left)** EM-LLM$_S$ vs. RAG (NV-Embed-v2 retriever) vs. full-context, with LLaMA-3.1-8B as the base LLM, evaluated on LongBench. **(Right)** Comparison of various long-sequence methods (sorted based on their context window length) on an extended version of $\infty$-Bench's _Retrieve.PassKey_.
 
 
 ## Usage
