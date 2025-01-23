@@ -1,6 +1,6 @@
 # EM-LLM: Human-like Episodic Memory for Infinite Context LLMs
 
-This repository contains a version of the code for EM-LLM: [[arXiv]](https://arxiv.org/abs/2407.09450).
+This repository contains a version of the code for EM-LLM: [[arXiv]](https://arxiv.org/abs/2407.09450). Our paper (with this code version) has now been <b>accepted to ICLR 2025</b>.
 
 ## Quick Links
 * [Overview](#overview)
