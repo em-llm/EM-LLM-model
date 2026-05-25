@@ -5,8 +5,12 @@ from .base import MultiStageDotProductAttention
 import torch
 from torch import nn
 
+# profiling
+from tools import nvtx_profiler
+
+@nvtx_profiler("attn")
 class TorchMultiStageDotProductAttention(MultiStageDotProductAttention):
-    def __init__(self, q_shape, dtype, device, output_softmax_denom=False):
+    def __init__(self, q_shape, dtype, device, output_softmax_denom=False, nvtx_profiling=False):
         super().__init__(q_shape, dtype, device, output_softmax_denom)
         self.logits_list = []
         self.logits_list_unmasked = []
@@ -111,6 +115,7 @@ class TorchMultiStageDotProductAttention(MultiStageDotProductAttention):
             k = k.reshape(shape[0], num_heads, shape[2], shape[3])
             v = v[:, :, None, :, :].expand(shape[0], shape[1], num_group, shape[2], shape[3])
             v = v.reshape(shape[0], num_heads, shape[2], shape[3])
+
 
         mask = self.create_mask(sliding_window, len_q, len_k, q.device, complement_sliding_window)
         self.v_list.append(v)
